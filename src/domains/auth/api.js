@@ -8,12 +8,19 @@ const {
   updateById,
   deleteById,
   register,
+  loginUserWithEmailAndPassword,
 } = require("./service");
 
-const { updateSchema, idSchema, registerSchema } = require("./validation");
+const {
+  updateSchema,
+  idSchema,
+  registerSchema,
+  loginSchema,
+} = require("./validation");
 const { validateRequest } = require("../../middlewares/request-validate");
 const { logRequest } = require("../../middlewares/log");
 const asyncHandler = require("../../middlewares/async-handler");
+const { generateAuthTokens } = require("../token/service");
 
 // CRUD for entity
 const routes = () => {
@@ -29,7 +36,17 @@ const routes = () => {
       res.status(201).json(item);
     })
   );
-
+  router.post(
+    "/login",
+    logRequest({}),
+    validateRequest({ schema: loginSchema }),
+    asyncHandler(async (req, res, next) => {
+      const { email, password } = req.body;
+      const user = await loginUserWithEmailAndPassword(email, password);
+      const tokens = await generateAuthTokens(user);
+      res.send({ user, tokens });
+    })
+  );
   router.get(
     "/:id",
     logRequest({}),

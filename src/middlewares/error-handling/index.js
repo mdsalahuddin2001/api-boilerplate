@@ -5,7 +5,7 @@ const { errorResponse } = require("../../libraries/common/sendResponse");
 
 const errorHandlerMiddleware = (err, req, res, next) => {
   let error = { ...err, statusCode: err.HTTPStatus };
-  console.log("errrcode", err);
+
   error.message = err.message;
   // Log to console for dev
   logger.error("error", error);

@@ -7,7 +7,10 @@ const registerSchema = Joi.object({
   password: Joi.string().required().custom(password),
   name: Joi.string().required(),
 });
-
+const loginSchema = Joi.object({
+  email: Joi.string().required().email(),
+  password: Joi.string().required(),
+});
 const updateSchema = Joi.object().keys({
   name: Joi.string(),
   // other properties
@@ -24,4 +27,4 @@ const idSchema = Joi.object().keys({
     .required(),
 });
 
-module.exports = { registerSchema, updateSchema, idSchema };
+module.exports = { registerSchema, loginSchema, updateSchema, idSchema };

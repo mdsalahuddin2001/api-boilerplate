@@ -51,6 +51,11 @@ const getById = async (id) => {
     throw new AppError(`Failed to get model`, error.message);
   }
 };
+const getByEmail = async (email) => {
+  const item = await Model.findOne({ email });
+  logger.info(`getByEmail(): model fetched`, { email });
+  return item;
+};
 
 const updateById = async (id, data) => {
   try {
@@ -78,6 +83,7 @@ module.exports = {
   create,
   search,
   getById,
+  getByEmail,
   updateById,
   deleteById,
 };

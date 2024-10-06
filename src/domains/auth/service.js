@@ -1,5 +1,5 @@
 const logger = require("../../libraries/log/logger");
-
+const { getByEmail } = require("../user/service");
 const Model = require("../user/schema");
 const { AppError } = require("../../libraries/error-handling/AppError");
 
@@ -13,7 +13,18 @@ const register = async (data) => {
   });
   return saved;
 };
-
+const loginUserWithEmailAndPassword = async (email, password) => {
+  const user = await getByEmail(email);
+  if (!user || !(await user.isPasswordMatch(password))) {
+    throw new AppError(
+      `Unauthorized loginWithEmailAndPassword()`,
+      "Incorrect email or password",
+      400
+    );
+  }
+  console.log("user", user);
+  return user;
+};
 const search = async (query) => {
   try {
     const { keyword } = query ?? {};
@@ -71,6 +82,7 @@ const deleteById = async (id) => {
 
 module.exports = {
   register,
+  loginUserWithEmailAndPassword,
   search,
   getById,
   updateById,
