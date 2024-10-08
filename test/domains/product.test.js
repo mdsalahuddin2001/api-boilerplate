@@ -1,12 +1,12 @@
 // test unknown endpoints
-const request = require('supertest');
-const { createExpressApp } = require('../../src/server');
+const request = require("supertest");
+const { createExpressApp } = require("../../src/server");
 
 const {
   search,
   create,
   deleteById,
-} = require('../../src/domains/product/service');
+} = require("../../src/domains/product/service");
 
 let app = null;
 beforeAll(async () => {
@@ -21,8 +21,8 @@ afterAll(async () => {
 
 // Test App module
 // Test API up and running
-describe('Domains.Products', () => {
-  describe('API', () => {
+describe("Domains.Products", () => {
+  describe("API", () => {
     const insertedIds = [];
 
     // clean up
@@ -33,20 +33,20 @@ describe('Domains.Products', () => {
     });
 
     // GET /api/v1/products
-    describe('GET /api/v1/products', () => {
-      it('should return status 200 and a JSON response', async () => {
-        const response = await request(app).get('/api/v1/products');
+    describe("GET /api/v1/products", () => {
+      it("should return status 200 and a JSON response", async () => {
+        const response = await request(app).get("/api/v1/products");
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
       });
     });
 
     // POST /api/v1/products
-    describe('POST /api/v1/products', () => {
-      it('should return status 201 and a JSON response', async () => {
-        const response = await request(app).post('/api/v1/products').send({
-          name: 'Sample Product',
-          description: 'This is a sample product for demonstration purposes.',
+    describe("POST /api/v1/products", () => {
+      it("should return status 201 and a JSON response", async () => {
+        const response = await request(app).post("/api/v1/products").send({
+          name: "Sample Product",
+          description: "This is a sample product for demonstration purposes.",
           price: 19,
           inStock: true,
         });
@@ -63,70 +63,70 @@ describe('Domains.Products', () => {
         expect(productResponse.body).toEqual(response.body);
       });
 
-      it('should return status 400 if the request body is invalid', async () => {
-        const response = await request(app).post('/api/v1/products').send({
-          name: 'Product without price',
+      it("should return status 400 if the request body is invalid", async () => {
+        const response = await request(app).post("/api/v1/products").send({
+          name: "Product without price",
         });
         expect(response.status).toBe(400);
       });
     });
 
     // GET /api/v1/products/:id
-    describe('GET /api/v1/products/:id', () => {
-      it('should return status 400 when id is not valid', async () => {
-        const response = await request(app).get('/api/v1/products/123');
+    describe("GET /api/v1/products/:id", () => {
+      it("should return status 400 when id is not valid", async () => {
+        const response = await request(app).get("/api/v1/products/123");
         expect(response.status).toBe(400);
       });
 
-      it('should return status 400 if the request params is invalid', async () => {
-        const response = await request(app).get('/api/v1/products/invalid-id');
+      it("should return status 400 if the request params is invalid", async () => {
+        const response = await request(app).get("/api/v1/products/invalid-id");
         expect(response.status).toBe(400);
       });
       //id = 66123283c07ca0e7dcc37990
-      it('should return status 404 if the product is not found', async () => {
+      it("should return status 404 if the product is not found", async () => {
         const response = await request(app).get(
-          '/api/v1/products/66123283c07ca0e7dcc37990'
+          "/api/v1/products/66123283c07ca0e7dcc37990"
         );
         expect(response.status).toBe(404);
       });
     });
 
     // PUT /api/v1/products/:id
-    describe('PUT /api/v1/products/:id', () => {
-      it('should return status 400 when id is not valid', async () => {
-        const response = await request(app).put('/api/v1/products/123');
+    describe("PUT /api/v1/products/:id", () => {
+      it("should return status 400 when id is not valid", async () => {
+        const response = await request(app).put("/api/v1/products/123");
         expect(response.status).toBe(400);
       });
 
-      it('should return status 400 if the request params is invalid', async () => {
-        const response = await request(app).put('/api/v1/products/invalid-id');
+      it("should return status 400 if the request params is invalid", async () => {
+        const response = await request(app).put("/api/v1/products/invalid-id");
         expect(response.status).toBe(400);
       });
 
-      it('should return status 404 if the product is not found', async () => {
+      it("should return status 404 if the product is not found", async () => {
         const response = await request(app).put(
-          '/api/v1/products/66123283c07ca0e7dcc37990'
+          "/api/v1/products/66123283c07ca0e7dcc37990"
         );
         expect(response.status).toBe(404);
       });
 
-      it('should return status 400 if the request body is invalid', async () => {
+      it("should return status 400 if the request body is invalid", async () => {
         const response = await request(app)
-          .put('/api/v1/products/66123283c07ca0e7dcc37990')
+          .put("/api/v1/products/66123283c07ca0e7dcc37990")
           .send({
-            _id: '66123283c07ca0e7dcc37990',
-            name: 'Product without price',
+            _id: "66123283c07ca0e7dcc37990",
+            name: "Product without price",
           });
         expect(response.status).toBe(400);
       });
 
       // create and then update the product and then assert the response
-      it('should return status 200 and a JSON response', async () => {
+      it("should return status 200 and a JSON response", async () => {
         const createResponse = await request(app)
-          .post('/api/v1/products')
+          .post("/api/v1/products")
           .send({
-            name: 'Sample Product',
-            description: 'This is a sample product for demonstration purposes.',
+            name: "Sample Product",
+            description: "This is a sample product for demonstration purposes.",
             price: 19,
             inStock: true,
           });
@@ -134,16 +134,16 @@ describe('Domains.Products', () => {
         const updateResponse = await request(app)
           .put(`/api/v1/products/${createResponse.body._id}`)
           .send({
-            name: 'Updated Product',
+            name: "Updated Product",
             description:
-              'This is an updated product for demonstration purposes.',
+              "This is an updated product for demonstration purposes.",
             price: 29,
             inStock: false,
           });
 
         expect(updateResponse.status).toBe(200);
         expect(updateResponse.body._id).toBe(createResponse.body._id);
-        expect(updateResponse.body.name).toBe('Updated Product');
+        expect(updateResponse.body.name).toBe("Updated Product");
         expect(updateResponse.body.price).toBe(29);
         expect(updateResponse.body.inStock).toBe(false);
 
@@ -159,25 +159,25 @@ describe('Domains.Products', () => {
     });
 
     // DELETE /api/v1/products/:id
-    describe('DELETE /api/v1/products/:id', () => {
-      it('should return status 400 when id is not valid', async () => {
-        const response = await request(app).delete('/api/v1/products/123');
+    describe("DELETE /api/v1/products/:id", () => {
+      it("should return status 400 when id is not valid", async () => {
+        const response = await request(app).delete("/api/v1/products/123");
         expect(response.status).toBe(400);
       });
 
-      it('should return status 400 if the request params is invalid', async () => {
+      it("should return status 400 if the request params is invalid", async () => {
         const response = await request(app).delete(
-          '/api/v1/products/invalid-id'
+          "/api/v1/products/invalid-id"
         );
         expect(response.status).toBe(400);
       });
 
-      it('should return status 204 if the product is successfully deleted', async () => {
+      it("should return status 204 if the product is successfully deleted", async () => {
         const createResponse = await request(app)
-          .post('/api/v1/products')
+          .post("/api/v1/products")
           .send({
-            name: 'Sample Product',
-            description: 'This is a sample product for demonstration purposes.',
+            name: "Sample Product",
+            description: "This is a sample product for demonstration purposes.",
             price: 19,
             inStock: true,
           });
@@ -196,24 +196,24 @@ describe('Domains.Products', () => {
     });
   });
 
-  describe('Service', () => {
+  describe("Service", () => {
     // setup products
     const products = [
       {
-        name: 'Product 1',
-        description: 'Product 1 description',
+        name: "Product 1",
+        description: "Product 1 description",
         price: 10,
         inStock: true,
       },
       {
-        name: 'Product 2',
-        description: 'Product 2 description',
+        name: "Product 2",
+        description: "Product 2 description",
         price: 20,
         inStock: true,
       },
       {
-        name: 'Product 3',
-        description: 'Product 3 description',
+        name: "Product 3",
+        description: "Product 3 description",
         price: 30,
         inStock: false,
       },
@@ -236,26 +236,26 @@ describe('Domains.Products', () => {
     });
 
     // search returns all products when no keyword filter is provided
-    it('should return all products when no keyword filter is provided', async () => {
+    it("should return all products when no keyword filter is provided", async () => {
       const result = await search();
       expect(result.length).toBe(products.length);
     });
     // search filters products by keyword in the name field (case-insensitive)
-    it('should filter products by keyword in the name field (case-insensitive)', async () => {
-      const result = await search({ keyword: 'product 1' });
+    it("should filter products by keyword in the name field (case-insensitive)", async () => {
+      const result = await search({ keyword: "product 1" });
       expect(result.length).toBe(1);
-      expect(result[0].name).toBe('Product 1');
+      expect(result[0].name).toBe("Product 1");
     });
     // search filters products by keyword in the description field (case-insensitive)
-    it('should filter products by keyword in the description field (case-insensitive)', async () => {
-      const result = await search({ keyword: 'description' });
+    it("should filter products by keyword in the description field (case-insensitive)", async () => {
+      const result = await search({ keyword: "description" });
       expect(result.length).toBe(products.length);
     });
     // search filters products with keywords matching both name and description fields
-    it('should filter products with keywords matching both name and description fields', async () => {
-      const result = await search({ keyword: 'product 3 description' });
+    it("should filter products with keywords matching both name and description fields", async () => {
+      const result = await search({ keyword: "product 3 description" });
       expect(result.length).toBe(1);
-      expect(result[0].name).toBe('Product 3');
+      expect(result[0].name).toBe("Product 3");
     });
   });
 });
